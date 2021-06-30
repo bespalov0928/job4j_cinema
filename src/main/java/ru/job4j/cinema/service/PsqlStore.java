@@ -57,7 +57,19 @@ public class PsqlStore {
     public Collection<Ticket> findAllTicket() {
         List<Ticket> tickets = new ArrayList<>();
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("select holl.id as idHoll,  holl.row as rowHoll ,holl.cell as cellHoll ,ticket.session_id as ticketSession_id ,ticket.row as ticketRow ,ticket.cell as ticketCell, holl.id as ticketPlase,ticket.account_id as ticketAccount_id from holl left join ticket on holl.row = ticket.row and holl.cell = ticket.cell order by holl.id")) {
+             PreparedStatement ps = cn.prepareStatement("select " +
+                     "holl.id as idHoll,  " + System.lineSeparator() +
+                     "holl.row as rowHoll, " + System.lineSeparator() +
+                     "holl.cell as cellHoll, " + System.lineSeparator() +
+                     "ticket.session_id as ticketSession_id, " + System.lineSeparator() +
+                     "ticket.row as ticketRow, " + System.lineSeparator() +
+                     "ticket.cell as ticketCell, " + System.lineSeparator() +
+                     "holl.id as ticketPlase, " + System.lineSeparator() +
+                     "ticket.account_id as ticketAccount_id " + System.lineSeparator() +
+                     "from holl left join ticket " + System.lineSeparator() +
+                     "on holl.row = ticket.row " + System.lineSeparator() +
+                     "and holl.cell = ticket.cell " + System.lineSeparator() +
+                     "order by holl.id")) {
             try (ResultSet it = ps.executeQuery()) {
                 while (it.next()) {
                     tickets.add(new Ticket(it.getInt("ticketSession_id"), it.getInt("rowHoll"), it.getInt("cellHoll"), it.getInt("ticketPlase"), it.getInt("ticketAccount_id")));
@@ -116,15 +128,14 @@ public class PsqlStore {
         Ticket ticket = null;
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement("select \n" +
-                     "ticket.id\n" +
-                     ",ticket.session_id\n" +
-                     ",ticket.row\n" +
-                     ",ticket.cell\n" +
-                     ",ticket.account_id\n" +
-                     ",holl.id as place \n" +
-                     "from ticket\n" +
-                     "\n" +
-                     "left join holl on holl.row = ticket.row and holl.cell = ticket.cell \n" +
+                     "ticket.id" + System.lineSeparator() +
+                     ",ticket.session_id" + System.lineSeparator() +
+                     ",ticket.row" + System.lineSeparator() +
+                     ",ticket.cell" + System.lineSeparator() +
+                     ",ticket.account_id" + System.lineSeparator() +
+                     ",holl.id as place " + System.lineSeparator() +
+                     "from ticket" + System.lineSeparator() +
+                     "left join holl on holl.row = ticket.row and holl.cell = ticket.cell" + System.lineSeparator() +
                      "where account_id = ?")) {
             ps.setInt(1, accountId);
             try (ResultSet it = ps.executeQuery()){

@@ -17,10 +17,9 @@ import java.util.List;
 
 public class HallServlet extends HttpServlet {
 
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Gson GSON = new GsonBuilder().setPrettyPrinting().create();
         System.out.println("doGet");
         resp.setContentType("text/plain");
         resp.setCharacterEncoding("UTF-8");
@@ -30,17 +29,6 @@ public class HallServlet extends HttpServlet {
         System.out.println(json);
         writer.println(json);
         writer.flush();
-//        req.setAttribute("tickets", tickets);
-//        req.getRequestDispatcher("index.jsp").forward(req, resp);
-        //super.doGet(req, resp);
     }
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("doPost");
-//        List<Ticket> tickets = (List<Ticket>) PsqlStore.instOf().findAllTicket();
-//        resp.sendRedirect(req.getContextPath()+"/index.jsp");
-
-        //super.doPost(req, resp);
-    }
 }

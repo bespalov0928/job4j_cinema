@@ -20,11 +20,11 @@ import java.util.Map;
 
 public class PaymentServelet extends HttpServlet {
 
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
+        Gson GSON = new GsonBuilder().setPrettyPrinting().create();
         //int row1 = Integer.parseInt(req.getParameter("row"));
         BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
         String in = br.readLine();
@@ -68,15 +68,15 @@ public class PaymentServelet extends HttpServlet {
         }
 
 
-        Ticket ticketNew = new Ticket(1, rowValue, colValue, placelValue, idAccount);
-        //Ticket ticketNew = new Ticket(1, 0, colValue, placelValue, idAccount);
-        //PsqlStore.instOf().setTicket(ticketNew);
-        Ticket ticketOld = PsqlStore.instOf().getTicket(idAccount);
-        if (ticketOld == null){
-            PsqlStore.instOf().setTicket(ticketNew);
-        }else {
-            PsqlStore.instOf().updateTicket(ticketNew);
-        }
+        //Ticket ticketNew = new Ticket(1, rowValue, colValue, placelValue, idAccount);
+        Ticket ticketNew = new Ticket(1, 1, 1, placelValue, idAccount);
+        PsqlStore.instOf().setTicket(ticketNew);
+//        Ticket ticketOld = PsqlStore.instOf().getTicket(idAccount);
+//        if (ticketOld == null){
+//            PsqlStore.instOf().setTicket(ticketNew);
+//        }else {
+//            PsqlStore.instOf().updateTicket(ticketNew);
+//        }
 
         PrintWriter writer = new PrintWriter(resp.getOutputStream());
         String text = "Ticket bay";
