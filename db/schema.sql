@@ -37,14 +37,13 @@ CREATE TABLE ticket (
     row INT NOT NULL,
     cell INT NOT NULL,
     account_id INT NOT NULL REFERENCES account(id) UNIQUE
-
-    CONSTRAINT valid_session CHECK (session_id > 0 )
-    CONSTRAINT valid_row CHECK (row > 0 and row < 4)
-    CONSTRAINT valid_cell CHECK (cell > 0 and cell < 4)
-    ,CONSTRAINT order_details UNIQUE (row, cell)
-
+ --   CONSTRAINT valid_session CHECK (session_id > 0 )
+ --   CONSTRAINT valid_row CHECK (row > 0 and row < 4)
+ --   CONSTRAINT valid_cell CHECK (cell > 0 and cell < 4)
+ --   ,CONSTRAINT order_details UNIQUE (row, cell)
 );
 
+ALTER TABLE ticket ADD CONSTRAINT dist_id_zipcode_key UNIQUE (row, cell);
 
 insert into ticket(id, session_id, row, cell, account_id) VALUES (1, 1, 1, 1, 1);
 --insert into ticket(id, session_id, row, cell, account_id) VALUES (2, 1, 1, 2, 102);

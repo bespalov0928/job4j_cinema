@@ -97,9 +97,6 @@ public class PsqlStore {
                     idTicket = id.getInt(1);
                 }
             }
-        } catch (PSQLException e) {
-            log.error(e.getMessage());
-            e.printStackTrace();
         } catch (Exception e) {
             log.error(e.getMessage());
             e.printStackTrace();

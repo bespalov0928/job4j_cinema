@@ -68,15 +68,15 @@ public class PaymentServelet extends HttpServlet {
         }
 
 
-        //Ticket ticketNew = new Ticket(1, rowValue, colValue, placelValue, idAccount);
-        Ticket ticketNew = new Ticket(1, 1, 1, placelValue, idAccount);
+        Ticket ticketNew = new Ticket(1, rowValue, colValue, placelValue, idAccount);
+//        Ticket ticketNew = new Ticket(1, 1, 1, placelValue, idAccount);
         PsqlStore.instOf().setTicket(ticketNew);
-//        Ticket ticketOld = PsqlStore.instOf().getTicket(idAccount);
-//        if (ticketOld == null){
-//            PsqlStore.instOf().setTicket(ticketNew);
-//        }else {
-//            PsqlStore.instOf().updateTicket(ticketNew);
-//        }
+        Ticket ticketOld = PsqlStore.instOf().getTicket(idAccount);
+        if (ticketOld == null){
+            PsqlStore.instOf().setTicket(ticketNew);
+        }else {
+            PsqlStore.instOf().updateTicket(ticketNew);
+        }
 
         PrintWriter writer = new PrintWriter(resp.getOutputStream());
         String text = "Ticket bay";
