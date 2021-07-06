@@ -1,4 +1,4 @@
-setInterval(update, 3000);
+//setInterval(update, 60000);
 function update() {
     $.ajax({
         type: 'GET',
