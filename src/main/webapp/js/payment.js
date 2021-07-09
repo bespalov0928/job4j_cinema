@@ -40,11 +40,11 @@ function pay() {
         contentType: 'application/json; charset=utf-8',
         dataType: 'json',
         success: function (data) {
-            alert(data);
+            alert("data");
             window.location.href = 'http://localhost:8080/cinema';
         },
         error: function (err) {
-            alert(err);
+            alert("err");
             window.location.href = 'http://localhost:8080/cinema';
         }
     });

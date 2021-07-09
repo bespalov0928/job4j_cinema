@@ -85,25 +85,33 @@ public class PaymentServelet extends HttpServlet {
 //        Ticket ticketNew = new Ticket(1, rowValue, colValue, placelValue, idAccount);
         Ticket ticketNew = new Ticket(1, 1, 1, placelValue, idAccount);
         try {
-            PsqlStore.instOf().setTicket(ticketNew) ;
-        }catch (PSQLException e){
-            text = "Ticket not bay";
+            PsqlStore.instOf().setTicket(ticketNew);
+        } catch (Throwable e) {
+            text = "Ticket not bay PSQLException";
             log.error(e.getMessage(), e);
+            System.out.println("getContextPath: "+ req.getContextPath());
+            resp.sendRedirect(req.getContextPath() + "/error.html");
+            //req.getRequestDispatcher("/error.html").forward(req, resp);
+            //throw new ServletException();
+            resp.sendError(400, "400");
+            resp.setStatus(400);
             String json = GSON.toJson(text);
             System.out.println(json);
             writer.println(json);
             writer.flush();
             return;
-        }catch (SQLException e){
-            text = "Ticket not bay";
-            log.error(e.getMessage(), e);
-            String json = GSON.toJson(text);
-            System.out.println(json);
-            writer.println(json);
-            writer.flush();
+//        } catch (SQLException e) {
+//            text = "Ticket not bay SQLException";
+//            log.error(e.getMessage(), e);
+//            resp.setStatus(400);
+//            String json = GSON.toJson(text);
+//            System.out.println(json);
+//            writer.println(json);
+//            writer.flush();
+
 //            req.setAttribute("text", text);
 //            resp.sendRedirect(req.getContextPath()+"/payment");
-            return;
+            //return;
         }
 
 //        Ticket ticketOld = PsqlStore.instOf().getTicket(idAccount);
