@@ -89,17 +89,19 @@ public class PaymentServelet extends HttpServlet {
         } catch (Throwable e) {
             text = "Ticket not bay PSQLException";
             log.error(e.getMessage(), e);
-            System.out.println("getContextPath: "+ req.getContextPath());
-            resp.sendRedirect(req.getContextPath() + "/error.html");
-            //req.getRequestDispatcher("/error.html").forward(req, resp);
-            //throw new ServletException();
-            resp.sendError(400, "400");
-            resp.setStatus(400);
-            String json = GSON.toJson(text);
-            System.out.println(json);
-            writer.println(json);
-            writer.flush();
-            return;
+//            System.out.println("getContextPath: "+ req.getContextPath());
+//            resp.sendRedirect(req.getContextPath() + "/error.html");
+//            req.getRequestDispatcher("/error.html").forward(req, resp);
+//            throw new ServletException();
+//            resp.sendError(400, "400");
+//            resp.setStatus(400);
+//            String json = GSON.toJson(text);
+//            System.out.println(json);
+//            writer.println(json);
+            resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+//            writer.println("400");
+//            writer.flush();
+//            return;
 //        } catch (SQLException e) {
 //            text = "Ticket not bay SQLException";
 //            log.error(e.getMessage(), e);

@@ -40,14 +40,20 @@ function pay() {
         contentType: 'application/json; charset=utf-8',
         dataType: 'json',
         success: function (data) {
+            console.log("data");
             alert("data");
             window.location.href = 'http://localhost:8080/cinema';
         },
-        error: function (err) {
+        error: function (data, status, error) {
+            console.log("data");
             alert("err");
             window.location.href = 'http://localhost:8080/cinema';
-        }
-    });
+        },
+        fail: function (jqXHR, status, errorThrown) {
+            console.log("data");
+            alert("err");
+            window.location.href = 'http://localhost:8080/cinema';
+        }    });
 }
 
 function validate() {
