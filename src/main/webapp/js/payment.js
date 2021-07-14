@@ -1,15 +1,15 @@
 //var path = window.location.pathname.replace("pages/payment.html", "");
 
 function getNumberPlace() {
+
     var url = window.location.href;
     var paramId = url.split('?')[1].split('=')[1];
     var row = paramId.split('/')[0];
     var col = paramId.split('/')[1];
-    // console.log(paramId);
     console.log('row:' + row);
     console.log('col:' + col);
     var heder = document.getElementById('heder');
-    heder.innerHTML = 'Вы выбрали ряд ' + row + ' место ' + col + ', Сумма : 500 рублей.';
+    heder.innerHTML = 'Вы выбрали ряд ' + row + ' место ' + col + ', Сумма : 600 рублей.';
     var rowHeder = document.getElementById('rowHeder');
     rowHeder.setAttribute('value', row);
 
@@ -18,13 +18,7 @@ function getNumberPlace() {
 }
 
 function pay() {
-    var url = window.location.href;
-    var paramId = url.split('?')[1].split('=')[1];
-    // var row = paramId.split('/')[0];
-    // var col = paramId.split('/')[1];
-    var place = url.split('?')[2].split('=')[1];
-    // console.log(document.getElementById('username').value);
-    console.log($('#rowHeder').val());
+
     alert('pay');
     $.ajax({
         type: "POST",
@@ -39,21 +33,26 @@ function pay() {
         }),
         contentType: 'application/json; charset=utf-8',
         dataType: 'json',
-        success: function (data) {
-            console.log("data");
-            alert("data");
-            window.location.href = 'http://localhost:8080/cinema';
-        },
-        error: function (data, status, error) {
-            console.log("data");
-            alert("err");
-            window.location.href = 'http://localhost:8080/cinema';
-        },
-        fail: function (jqXHR, status, errorThrown) {
-            console.log("data");
-            alert("err");
-            window.location.href = 'http://localhost:8080/cinema';
-        }    });
+    }).done(function (data) {
+        console.log("data");
+        console.log(data);
+        alert("data");
+        window.location.href = 'http://localhost:8080/cinema';
+    }).fail(function (data, status, error) {
+        console.log("fail");
+        console.log(data);
+        console.log(data.status );
+
+        console.log(status);
+        alert("fail, status: "+status);
+
+        if (data.status == 401){
+            alert("401");
+            window.location.href = 'http://localhost:8080/cinema/error.html';
+        }
+    });
+
+    alert("end");
 }
 
 function validate() {

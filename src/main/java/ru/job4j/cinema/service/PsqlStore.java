@@ -83,7 +83,7 @@ public class PsqlStore {
         return tickets;
     }
 
-    public int setTicket(Ticket ticket) throws PSQLException, SQLException{
+    public int setTicket(Ticket ticket) throws PSQLException, SQLException {
         int idTicket = -1;
         Connection cn = pool.getConnection();
         PreparedStatement ps = cn.prepareStatement("insert into ticket(session_id, row, cell, account_id) VALUES (?, ?, ?, ?)",
@@ -101,87 +101,85 @@ public class PsqlStore {
         return idTicket;
     }
 
-//        public void updateTicket (Ticket ticket) {
-//            try (Connection cn = pool.getConnection();
-//                 PreparedStatement ps = cn.prepareStatement(
-//                         "UPDATE ticket SET session_id = ?, row = ?, cell = ? WHERE account_id = ?",
-//                         PreparedStatement.RETURN_GENERATED_KEYS)
-//            ) {
-//                ps.setInt(1, ticket.getSession_id());
-//                ps.setInt(2, ticket.getRow());
-//                ps.setInt(3, ticket.getCell());
-//                ps.setInt(4, ticket.getAccount_id());
-//                ps.execute();
-//            } catch (Exception e) {
-//                log.error(e.getMessage(), e);
-//            }
-//        }
+    public void updateTicket(Ticket ticket) {
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement(
+                     "UPDATE ticket SET session_id = ?, row = ?, cell = ? WHERE account_id = ?",
+                     PreparedStatement.RETURN_GENERATED_KEYS)
+        ) {
+            ps.setInt(1, ticket.getSession_id());
+            ps.setInt(2, ticket.getRow());
+            ps.setInt(3, ticket.getCell());
+            ps.setInt(4, ticket.getAccount_id());
+            ps.execute();
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+    }
 
-//        public Ticket getTicket ( int accountId){
-//            Ticket ticket = null;
-//            try (Connection cn = pool.getConnection();
-//                 PreparedStatement ps = cn.prepareStatement("select \n" +
-//                         "ticket.id" + System.lineSeparator() +
-//                         ",ticket.session_id" + System.lineSeparator() +
-//                         ",ticket.row" + System.lineSeparator() +
-//                         ",ticket.cell" + System.lineSeparator() +
-//                         ",ticket.account_id" + System.lineSeparator() +
-//                         ",holl.id as place " + System.lineSeparator() +
-//                         "from ticket" + System.lineSeparator() +
-//                         "left join holl on holl.row = ticket.row and holl.cell = ticket.cell" + System.lineSeparator() +
-//                         "where account_id = ?")) {
-//                ps.setInt(1, accountId);
-//                try (ResultSet it = ps.executeQuery()) {
-//                    while (it.next()) {
-//                        ticket = new Ticket(it.getInt("session_id"), it.getInt("row"), it.getInt("cell"), it.getInt("place"), it.getInt("account_id"));
-//                        ticket.setId(it.getInt("id"));
-//                    }
-//                }
-//            } catch (Exception e) {
-//                log.error(e.getMessage(), e);
-//            }
-//            return ticket;
-//        }
+    public Ticket getTicket(int accountId) {
+        Ticket ticket = null;
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement("select \n" +
+                     "ticket.id" + System.lineSeparator() +
+                     ",ticket.session_id" + System.lineSeparator() +
+                     ",ticket.row" + System.lineSeparator() +
+                     ",ticket.cell" + System.lineSeparator() +
+                     ",ticket.account_id" + System.lineSeparator() +
+                     ",holl.id as place " + System.lineSeparator() +
+                     "from ticket" + System.lineSeparator() +
+                     "left join holl on holl.row = ticket.row and holl.cell = ticket.cell" + System.lineSeparator() +
+                     "where account_id = ?")) {
+            ps.setInt(1, accountId);
+            try (ResultSet it = ps.executeQuery()) {
+                while (it.next()) {
+                    ticket = new Ticket(it.getInt("session_id"), it.getInt("row"), it.getInt("cell"), it.getInt("place"), it.getInt("account_id"));
+                    ticket.setId(it.getInt("id"));
+                }
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+        return ticket;
+    }
 
-//        public int setAccount (Account account){
-//            int idAccount = -1;
-//            try (Connection cn = pool.getConnection();
-//                 PreparedStatement ps = cn.prepareStatement(
-//                         "insert into account(username, email, phone) VALUES (?, ?, ?)",
-//                         PreparedStatement.RETURN_GENERATED_KEYS)
-//            ) {
-//                ps.setString(1, account.getUsername());
-//                ps.setString(2, account.getEmail());
-//                ps.setString(3, account.getPhone());
-//                ps.execute();
-//                try (ResultSet id = ps.getGeneratedKeys()) {
-//                    if (id.next()) {
-//                        idAccount = id.getInt(1);
-//                        account.setId(idAccount);
-//                    }
-//                }
-//            } catch (Exception e) {
-//                log.error(e.getMessage(), e);
-//            }
-//            return idAccount;
-//        }
+    public int setAccount(Account account) {
+        int idAccount = -1;
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement(
+                     "insert into account(username, email, phone) VALUES (?, ?, ?)",
+                     PreparedStatement.RETURN_GENERATED_KEYS)
+        ) {
+            ps.setString(1, account.getUsername());
+            ps.setString(2, account.getEmail());
+            ps.setString(3, account.getPhone());
+            ps.execute();
+            try (ResultSet id = ps.getGeneratedKeys()) {
+                if (id.next()) {
+                    idAccount = id.getInt(1);
+                    account.setId(idAccount);
+                }
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+        return idAccount;
+    }
 
-//        public Account getAccount (String phone){
-//            Account ac = null;
-//            try (Connection cn = pool.getConnection();
-//                 PreparedStatement ps = cn.prepareStatement("select * from account where phone = ?")) {
-//                ps.setString(1, phone);
-//                try (ResultSet it = ps.executeQuery()) {
-//                    while (it.next()) {
-//                        ac = new Account(it.getString("username"), it.getString("email"), it.getString("phone"));
-//                        ac.setId(it.getInt("id"));
-//                    }
-//                }
-//            } catch (Exception e) {
-//                log.error(e.getMessage(), e);
-//            }
-//            return ac;
-//
-//        }
-//    }
+    public Account getAccount(String phone) {
+        Account ac = null;
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement("select * from account where phone = ?")) {
+            ps.setString(1, phone);
+            try (ResultSet it = ps.executeQuery()) {
+                while (it.next()) {
+                    ac = new Account(it.getString("username"), it.getString("email"), it.getString("phone"));
+                    ac.setId(it.getInt("id"));
+                }
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+        return ac;
+    }
 }
