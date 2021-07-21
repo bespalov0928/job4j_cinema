@@ -1,16 +1,14 @@
-package ru.job4j.cinema.controller;
+package ru.job4j.cinema.service;
 
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.log4j.Logger;
-import org.postgresql.util.PSQLException;
-import ru.job4j.cinema.persistence.Account;
-import ru.job4j.cinema.persistence.Ticket;
-import ru.job4j.cinema.service.PsqlStore;
+import ru.job4j.cinema.controller.Account;
+import ru.job4j.cinema.controller.Ticket;
+import ru.job4j.cinema.persistence.PsqlStore;
 import org.json.JSONObject;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -20,7 +18,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.sql.SQLException;
 import java.util.Map;
 
 @WebServlet("/error")
@@ -68,10 +65,10 @@ public class PaymentServelet extends HttpServlet {
         Integer placelValue = Integer.valueOf(place.split("=")[1]);
 
         int idAccount = -1;
-        Account ac = PsqlStore.instOf().getAccount(phoneValue);
+        Account ac = PsqlStore.instOf().findAccountByPhone(phoneValue);
         if (ac == null) {
             Account account = new Account(usernameValue,emailValue,phoneValue);
-            idAccount = PsqlStore.instOf().setAccount(account);
+            idAccount = PsqlStore.instOf().addAccount(account);
         } else {
             idAccount = ac.getId();
         }
@@ -79,7 +76,7 @@ public class PaymentServelet extends HttpServlet {
         Ticket ticketNew = new Ticket(1, rowValue, colValue, placelValue, idAccount);
         //Ticket ticketNew = new Ticket(1, 1, 1, placelValue, idAccount);
         try {
-            PsqlStore.instOf().setTicket(ticketNew);
+            PsqlStore.instOf().addTicket(ticketNew);
         } catch (Throwable e) {
             resp.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Билет уже куплен");
             out.print(e.getMessage());

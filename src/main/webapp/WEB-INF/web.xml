@@ -11,7 +11,7 @@
 
     <servlet>
         <servlet-name>HallServlet</servlet-name>
-        <servlet-class>ru.job4j.cinema.controller.HallServlet</servlet-class>
+        <servlet-class>ru.job4j.cinema.service.HallServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>HallServlet</servlet-name>
@@ -20,7 +20,7 @@
 
     <servlet>
         <servlet-name>PaymentServelet</servlet-name>
-        <servlet-class>ru.job4j.cinema.controller.PaymentServelet</servlet-class>
+        <servlet-class>ru.job4j.cinema.service.PaymentServelet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>PaymentServelet</servlet-name>

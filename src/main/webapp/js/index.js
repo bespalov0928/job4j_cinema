@@ -78,5 +78,6 @@ function forward() {
             place = arrPlace[index].value;
         }
     }
-    window.location = 'http://localhost:8080/cinema/pages/payment.html?id=' + id + '?place=' + place;
+    window.location = window.location.href+'pages/payment.html?id=' + id + '?place=' + place
+    //window.location = 'http://localhost:8080/cinema/pages/payment.html?id=' + id + '?place=' + place;
 }

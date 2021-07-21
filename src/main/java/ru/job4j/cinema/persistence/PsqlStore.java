@@ -1,11 +1,10 @@
-package ru.job4j.cinema.service;
+package ru.job4j.cinema.persistence;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.postgresql.util.PSQLException;
-import ru.job4j.cinema.persistence.Account;
-import ru.job4j.cinema.persistence.Ticket;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,6 +16,8 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
+import ru.job4j.cinema.controller.Account;
+import ru.job4j.cinema.controller.Ticket;
 
 public class PsqlStore {
     private final BasicDataSource pool = new BasicDataSource();
@@ -26,9 +27,9 @@ public class PsqlStore {
 
     public PsqlStore() {
         Properties cfg = new Properties();
+        String currentPath = this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
         try (BufferedReader io = new BufferedReader(
-                //new FileReader("db.properties")
-                new FileReader("C:\\projects\\job4j_cinema\\db.properties")
+                new FileReader(currentPath+"/db.properties")
         )) {
             cfg.load(io);
         } catch (Exception e) {
@@ -74,7 +75,13 @@ public class PsqlStore {
                      "order by holl.id")) {
             try (ResultSet it = ps.executeQuery()) {
                 while (it.next()) {
-                    tickets.add(new Ticket(it.getInt("ticketSession_id"), it.getInt("rowHoll"), it.getInt("cellHoll"), it.getInt("ticketPlase"), it.getInt("ticketAccount_id")));
+                    tickets.add(new Ticket(
+                            it.getInt("ticketSession_id"),
+                            it.getInt("rowHoll"),
+                            it.getInt("cellHoll"),
+                            it.getInt("ticketPlase"),
+                            it.getInt("ticketAccount_id")
+                    ));
                 }
             }
         } catch (Exception e) {
@@ -83,10 +90,11 @@ public class PsqlStore {
         return tickets;
     }
 
-    public int setTicket(Ticket ticket) throws PSQLException, SQLException {
+    public int addTicket(Ticket ticket) throws PSQLException, SQLException {
         int idTicket = -1;
         Connection cn = pool.getConnection();
-        PreparedStatement ps = cn.prepareStatement("insert into ticket(session_id, row, cell, account_id) VALUES (?, ?, ?, ?)",
+        PreparedStatement ps = cn.prepareStatement(
+                "insert into ticket(session_id, row, cell, account_id) VALUES (?, ?, ?, ?)",
                 PreparedStatement.RETURN_GENERATED_KEYS);
         ps.setInt(1, ticket.getSession_id());
         ps.setInt(2, ticket.getRow());
@@ -117,7 +125,7 @@ public class PsqlStore {
         }
     }
 
-    public Ticket getTicket(int accountId) {
+    public Ticket findTicketById(int accountId) {
         Ticket ticket = null;
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement("select \n" +
@@ -133,7 +141,13 @@ public class PsqlStore {
             ps.setInt(1, accountId);
             try (ResultSet it = ps.executeQuery()) {
                 while (it.next()) {
-                    ticket = new Ticket(it.getInt("session_id"), it.getInt("row"), it.getInt("cell"), it.getInt("place"), it.getInt("account_id"));
+                    ticket = new Ticket(
+                            it.getInt("session_id"),
+                            it.getInt("row"),
+                            it.getInt("cell"),
+                            it.getInt("place"),
+                            it.getInt("account_id")
+                    );
                     ticket.setId(it.getInt("id"));
                 }
             }
@@ -143,7 +157,7 @@ public class PsqlStore {
         return ticket;
     }
 
-    public int setAccount(Account account) {
+    public int addAccount(Account account) {
         int idAccount = -1;
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement(
@@ -166,14 +180,18 @@ public class PsqlStore {
         return idAccount;
     }
 
-    public Account getAccount(String phone) {
+    public Account findAccountByPhone(String phone) {
         Account ac = null;
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement("select * from account where phone = ?")) {
             ps.setString(1, phone);
             try (ResultSet it = ps.executeQuery()) {
                 while (it.next()) {
-                    ac = new Account(it.getString("username"), it.getString("email"), it.getString("phone"));
+                    ac = new Account(
+                            it.getString("username"),
+                            it.getString("email"),
+                            it.getString("phone")
+                    );
                     ac.setId(it.getInt("id"));
                 }
             }

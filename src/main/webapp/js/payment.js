@@ -48,7 +48,8 @@ function pay() {
 
         if (data.status == 401){
             alert("401");
-            window.location.href = 'http://localhost:8080/cinema/error.html';
+            window.location.href = window.location.href+'error.html';
+            //window.location.href = 'http://localhost:8080/cinema/error.html';
         }
     });
 

@@ -1,9 +1,9 @@
-package ru.job4j.cinema.controller;
+package ru.job4j.cinema.service;
 
 import com.google.gson.*;
 
-import ru.job4j.cinema.persistence.Ticket;
-import ru.job4j.cinema.service.PsqlStore;
+import ru.job4j.cinema.controller.Ticket;
+import ru.job4j.cinema.persistence.PsqlStore;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
