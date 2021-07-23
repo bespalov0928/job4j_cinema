@@ -128,8 +128,7 @@ public class PsqlStore {
     public Ticket findTicketById(int accountId) {
         Ticket ticket = null;
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("select \n" +
-                     "ticket.id" + System.lineSeparator() +
+             PreparedStatement ps = cn.prepareStatement("select ticket.id" + System.lineSeparator() +
                      ",ticket.session_id" + System.lineSeparator() +
                      ",ticket.row" + System.lineSeparator() +
                      ",ticket.cell" + System.lineSeparator() +
