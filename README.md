@@ -6,4 +6,4 @@
 
 ![alt text](images/Screenshot_1.png)
 
-![alt text](images/Screenshot_.png)
+![alt text](images/Screenshot_2.png)
